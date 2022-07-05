@@ -5,6 +5,14 @@
  */
 exports.__esModule = true;
 exports.DoublyLinkedList = exports.Node = void 0;
+/**
+ * Big O of Doubly Linked List
+ * Insertion - O(1)
+ * Removal - O(1)
+ * Searching* - O(N)
+ *      *Technically O(N/2) but simplifies to O(N)
+ * Access - O(N)
+ */
 /**Stores single piece of data: value, next, and previous */
 var Node = /** @class */ (function () {
     function Node(val) {
@@ -56,9 +64,25 @@ var DoublyLinkedList = /** @class */ (function () {
         return lastNode;
     };
     /**
+     * Removes node from beginning of list.
+     * Returns node that was removed
+     * or undefined if list is empty
+     */
+    DoublyLinkedList.prototype.shift = function () {
+        if (this.length === 0) {
+            return undefined;
+        }
+        var currentNode = this.head;
+        var nextNode = currentNode.next;
+        nextNode.previous = null;
+        this.head = nextNode;
+        return currentNode;
+    };
+    /**
+  
      * Adds node to beginning of list
      */
-    DoublyLinkedList.prototype.shift = function (val) {
+    DoublyLinkedList.prototype.unshift = function (val) {
         var newNode = new Node(val);
         if (this.length === 0) {
             this.head = newNode;
@@ -75,26 +99,11 @@ var DoublyLinkedList = /** @class */ (function () {
         return this;
     };
     /**
-     * Removes node from beginning of list.
-     * Returns node that was removed
-     * or undefined if list is empty
-     */
-    DoublyLinkedList.prototype.unshift = function () {
-        if (this.length === 0) {
-            return undefined;
-        }
-        var currentNode = this.head;
-        var nextNode = currentNode.next;
-        nextNode.previous = null;
-        this.head = nextNode;
-        return currentNode;
-    };
-    /**
      * Returns node based on index
      */
     DoublyLinkedList.prototype.get = function (index) {
         if (index < 0 || index >= this.length) {
-            return undefined;
+            return null;
         }
         var currentNode = null;
         if (index > this.length / 2) {
@@ -130,10 +139,60 @@ var DoublyLinkedList = /** @class */ (function () {
         }
         return false;
     };
+    /**
+     * Inserts node at specified index
+     */
+    DoublyLinkedList.prototype.insert = function (val, index) {
+        // edge cases
+        if (index < 0 || index > this.length) {
+            return false;
+        }
+        if (index === 0) {
+            return !!this.unshift(val);
+        }
+        if (index === this.length) {
+            return !!this.push(val);
+        }
+        // node that will be to left of new node
+        var prevNode = this.get(index - 1);
+        // node that will be to right of new node
+        var nextNode = prevNode.next;
+        // node being inserted
+        var newNode = new Node(val);
+        prevNode.next = newNode;
+        if (nextNode) {
+            nextNode.previous = newNode;
+        }
+        newNode.previous = prevNode;
+        newNode.next = newNode;
+        this.length++;
+        return true;
+    };
+    /**
+     * Removes node at specified index.
+     * Returns false if index is out of bounds else true
+     */
+    DoublyLinkedList.prototype.remove = function (index) {
+        if (index < 0 || index >= this.length) {
+            return false;
+        }
+        if (index === 0) {
+            return !!this.shift();
+        }
+        if (index === this.length - 1) {
+            return !!this.pop();
+        }
+        // node being removed
+        var targetNode = this.get(index);
+        // node before removed node
+        var prevNode = targetNode.next;
+        // node after removed node
+        var nextNode = targetNode.previous;
+        prevNode.next = nextNode;
+        nextNode.previous = prevNode;
+        this.length--;
+        return true;
+    };
     return DoublyLinkedList;
 }());
 exports.DoublyLinkedList = DoublyLinkedList;
-var list = new DoublyLinkedList();
-list.push(5);
-list.push(15);
-list.set(10, 0);

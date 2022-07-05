@@ -175,10 +175,10 @@ export class SinglyLinkedList {
     // main process
     let newNode: Node = new Node(val);
     let prevNode: Node | null = this.get(index - 1);
-    let targetNode: Node | null = prevNode!.next;
+    let nextNode: Node | null = prevNode!.next;
 
     prevNode!.next = newNode;
-    newNode.next = targetNode;
+    newNode.next = nextNode;
     this.length++;
 
     return true;

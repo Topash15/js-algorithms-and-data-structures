@@ -3,6 +3,15 @@
  * Allows for more flexibility at the cost of memory consumption
  */
 
+/**
+ * Big O of Doubly Linked List
+ * Insertion - O(1)
+ * Removal - O(1)
+ * Searching* - O(N)
+ *      *Technically O(N/2) but simplifies to O(N)
+ * Access - O(N)
+ */
+
 /**Stores single piece of data: value, next, and previous */
 export class Node {
   value: any;
@@ -63,9 +72,27 @@ export class DoublyLinkedList {
   }
 
   /**
+   * Removes node from beginning of list.
+   * Returns node that was removed
+   * or undefined if list is empty
+   */
+  shift(): Node | undefined {
+    if (this.length === 0) {
+      return undefined;
+    }
+    const currentNode = this.head;
+    const nextNode = currentNode!.next;
+    nextNode!.previous = null;
+    this.head = nextNode;
+
+    return currentNode!;
+  }
+
+  /**
+
    * Adds node to beginning of list
    */
-  shift(val: any): DoublyLinkedList {
+  unshift(val: any): DoublyLinkedList {
     const newNode = new Node(val);
     if (this.length === 0) {
       this.head = newNode;
@@ -85,28 +112,11 @@ export class DoublyLinkedList {
   }
 
   /**
-   * Removes node from beginning of list.
-   * Returns node that was removed
-   * or undefined if list is empty
-   */
-  unshift(): Node | undefined {
-    if (this.length === 0) {
-      return undefined;
-    }
-    const currentNode = this.head;
-    const nextNode = currentNode!.next;
-    nextNode!.previous = null;
-    this.head = nextNode;
-
-    return currentNode!;
-  }
-
-  /**
    * Returns node based on index
    */
-  get(index: number): Node | undefined | null{
+  get(index: number): Node | null {
     if (index < 0 || index >= this.length) {
-      return undefined;
+      return null;
     }
 
     let currentNode: Node | null = null;
@@ -137,16 +147,71 @@ export class DoublyLinkedList {
    * Sets value of node at specified index
    */
   set(val: any, index: number): boolean {
-    let currentNode : Node | undefined | null= this.get(index);
+    let currentNode: Node | undefined | null = this.get(index);
     if (currentNode) {
       currentNode!.value = val;
       return true;
     }
     return false;
   }
-}
 
-const list = new DoublyLinkedList();
-list.push(5);
-list.push(15);
-list.set(10,0);
+  /**
+   * Inserts node at specified index
+   */
+  insert(val: any, index: number): boolean {
+    // edge cases
+    if (index < 0 || index > this.length) {
+      return false;
+    }
+    if (index === 0) {
+      return !!this.unshift(val);
+    }
+    if (index === this.length) {
+      return !!this.push(val);
+    }
+
+    // node that will be to left of new node
+    let prevNode: Node | null = this.get(index - 1);
+    // node that will be to right of new node
+    let nextNode: Node | null = prevNode!.next;
+    // node being inserted
+    let newNode: Node = new Node(val);
+    prevNode!.next = newNode;
+    if (nextNode) {
+      nextNode.previous = newNode;
+    }
+    newNode.previous = prevNode!;
+    newNode.next = newNode;
+    this.length++;
+    return true;
+  }
+
+  /**
+   * Removes node at specified index.
+   * Returns false if index is out of bounds else true
+   */
+  remove(index: number): boolean {
+    if (index < 0 || index >= this.length) {
+      return false;
+    }
+    if (index === 0) {
+      return !!this.shift();
+    }
+    if (index === this.length - 1) {
+      return !!this.pop();
+    }
+
+    // node being removed
+    let targetNode: Node | null = this.get(index);
+    // node before removed node
+    let prevNode: Node | null = targetNode!.next;
+    // node after removed node
+    let nextNode: Node | null = targetNode!.previous;
+
+    prevNode!.next = nextNode;
+    nextNode!.previous = prevNode;
+    this.length--;
+
+    return true;
+  }
+}
