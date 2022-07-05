@@ -105,6 +105,7 @@ describe("SinglyLinkedList", () => {
       list.push(820);
       expect(list.set(5, 3)).toBe(true);
       expect(list.get(3)!.value).toBe(5);
+      expect(list.get(2)!.next!.value).toBe(5);
     })
     it("returns false if indexed node is not found", ()=>{
       let list = new SinglyLinkedList();

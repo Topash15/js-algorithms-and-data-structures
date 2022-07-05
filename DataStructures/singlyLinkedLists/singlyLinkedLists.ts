@@ -147,7 +147,7 @@ export class SinglyLinkedList {
    * Changes the value of a node based on it's position in the linked list
    */
   set(val: any, index: number): boolean {
-    let targetNode = this.get(index);
+    let targetNode : Node | null = this.get(index);
     if (targetNode) {
       targetNode.value = val;
       return true;

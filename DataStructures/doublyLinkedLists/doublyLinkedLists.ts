@@ -104,16 +104,49 @@ export class DoublyLinkedList {
   /**
    * Returns node based on index
    */
-  get(index: number): Node | undefined {
-    if(index < 0 || index >= this.length) {
-        return undefined;
+  get(index: number): Node | undefined | null{
+    if (index < 0 || index >= this.length) {
+      return undefined;
     }
-    if(index > this.length/2){
-        const currentNode = this.tail;
-        
+
+    let currentNode: Node | null = null;
+    if (index > this.length / 2) {
+      currentNode = this.tail;
+      let prevNode = currentNode!.previous;
+      let counter = this.length - 1;
+      while (counter != index) {
+        currentNode = prevNode;
+        prevNode = currentNode!.previous;
+        counter--;
+      }
     }
-    if(index <= this.length/2){
-        const currentNode = this.head;
+    if (index <= this.length / 2) {
+      currentNode = this.head;
+      let nextNode = currentNode!.next;
+      let counter = 0;
+      while (counter != index) {
+        currentNode = nextNode;
+        nextNode = currentNode!.next;
+        counter++;
+      }
     }
+    return currentNode;
+  }
+
+  /**
+   * Sets value of node at specified index
+   */
+  set(val: any, index: number): boolean {
+    let currentNode : Node | undefined | null= this.get(index);
+    if (currentNode) {
+      currentNode!.value = val;
+      return true;
+    }
+    return false;
   }
 }
+
+const list = new DoublyLinkedList();
+list.push(5);
+list.push(15);
+list.set(10,0);

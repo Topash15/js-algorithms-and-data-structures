@@ -96,13 +96,44 @@ var DoublyLinkedList = /** @class */ (function () {
         if (index < 0 || index >= this.length) {
             return undefined;
         }
+        var currentNode = null;
         if (index > this.length / 2) {
-            var currentNode = this.tail;
+            currentNode = this.tail;
+            var prevNode = currentNode.previous;
+            var counter = this.length - 1;
+            while (counter != index) {
+                currentNode = prevNode;
+                prevNode = currentNode.previous;
+                counter--;
+            }
         }
         if (index <= this.length / 2) {
-            var currentNode = this.head;
+            currentNode = this.head;
+            var nextNode = currentNode.next;
+            var counter = 0;
+            while (counter != index) {
+                currentNode = nextNode;
+                nextNode = currentNode.next;
+                counter++;
+            }
         }
+        return currentNode;
+    };
+    /**
+     * Sets value of node at specified index
+     */
+    DoublyLinkedList.prototype.set = function (val, index) {
+        var currentNode = this.get(index);
+        if (currentNode) {
+            currentNode.value = val;
+            return true;
+        }
+        return false;
     };
     return DoublyLinkedList;
 }());
 exports.DoublyLinkedList = DoublyLinkedList;
+var list = new DoublyLinkedList();
+list.push(5);
+list.push(15);
+list.set(10, 0);

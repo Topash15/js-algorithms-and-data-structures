@@ -85,4 +85,27 @@ describe("DoublyLinkedList", () => {
         expect(list.get(2)!.value).toBe(25);
     })
   })
+
+  describe("Set method", () => {
+    it("should return true after setting value of node at specified index", () => {
+        const list = new DoublyLinkedList();
+        list.push(5);
+        list.push(15);
+        list.push(25);
+        expect(list.set(35, 2)).toBe(true);
+        expect(list.tail!.value).toBe(35);
+        expect(list.set(25, 1)).toBe(true);
+        expect(list.head!.next!.value).toBe(25);
+        expect(list.tail!.previous!.value).toBe(25);
+    })
+    it("returns false if node at specified index does not exist", () => {
+        const list = new DoublyLinkedList();
+        expect(list.set(5,1)).toBe(false);
+        list.push(5);
+        list.push(15);
+        list.push(25);
+        expect(list.set(5,15)).toBe(false);
+        expect(list.set(5,-1)).toBe(false);
+    })
+  })
 });
