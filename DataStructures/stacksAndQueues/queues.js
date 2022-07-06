@@ -1,6 +1,11 @@
 "use strict";
 /**
  * First in First Out data structure
+ * Big O:
+ * Insertion- O(1)
+ * Removal- O(1)
+ * Searching- O(N)
+ * Access- O(N)
  */
 exports.__esModule = true;
 exports.Queue = exports.Node = void 0;
